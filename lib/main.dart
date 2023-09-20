@@ -12,76 +12,56 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: DrawerWidget(),
+      home: SampleAppBar(),
     );
   }
 }
 
-class DrawerWidget extends StatefulWidget {
-  const DrawerWidget({
+class SampleAppBar extends StatefulWidget {
+  const SampleAppBar({
     Key? key,
   }) : super(key: key);
 
   @override
-  State<DrawerWidget> createState() => _DrawerWidgetState();
+  State<SampleAppBar> createState() => _SampleAppBarState();
 }
 
-class _DrawerWidgetState extends State<DrawerWidget> {
+class _SampleAppBarState extends State<SampleAppBar> {
+  bool _pinned = true;
+  bool _snap = false;
+  bool _floating = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Drawer"),
-        actions: const [],
-      ),
-      drawer: Drawer(
-        child: Container(
-          color: Colors.white,
-          child: ListView(
-            padding: const EdgeInsets.all(0),
-            children: [
-              Container(
-                color: Colors.blue[100],
-                child: UserAccountsDrawerHeader(
-                  currentAccountPicture: const CircleAvatar(
-                    child: FlutterLogo(size: 50),
-                  ),
-                  decoration: BoxDecoration(color: Colors.grey[200]),
-                  accountName: const Text(
-                    'Rozak',
-                    style: TextStyle(
-                      color: Colors.black,
-                    ),
-                  ),
-                  accountEmail: const Text(
-                    'rozak.dev@gmail.com',
-                    style: TextStyle(
-                      color: Colors.black,
-                    ),
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            pinned: _pinned,
+            snap: _snap,
+            floating: _floating,
+            expandedHeight: 160,
+            flexibleSpace: const FlexibleSpaceBar(
+              title: Text(
+                'Sliver App Bar',
+              ),
+              background: FlutterLogo(),
+            ),
+          ),
+          SliverList(
+            delegate: SliverChildBuilderDelegate((context, index) {
+              return Container(
+                color: index.isOdd ? Colors.white : Colors.amber,
+                height: 100,
+                child: Center(
+                  child: Text(
+                    '$index',
+                    textScaleFactor: 5,
                   ),
                 ),
-              ),
-              ListTile(
-                title: const Text('Menu 1'),
-                onTap: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-              ListTile(
-                title: const Text('Menu 2'),
-                onTap: () {},
-              ),
-            ],
+              );
+            }, childCount: 20),
           ),
-        ),
-      ),
-      body: SingleChildScrollView(
-        child: Container(
-          padding: const EdgeInsets.all(10.0),
-          child: Column(
-            children: [],
-          ),
-        ),
+        ],
       ),
     );
   }
